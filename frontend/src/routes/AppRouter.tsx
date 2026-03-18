@@ -9,6 +9,7 @@ import Login from '../pages/auth/Login'
 import Asistencia from '../pages/portero/Asistencia'
 import PublicRoute from '../guards/PublicRoute'
 import CrearUsuario from '../pages/admin/CrearUsuario'
+import CrearAlumno from '../pages/admin/CrearAlumno'
 
 
 export default function AppRouter() {
@@ -16,14 +17,7 @@ export default function AppRouter() {
         <BrowserRouter>
             <Routes>
 
-                <Route
-                    path="/login"
-                    element={
-                        <PublicRoute>
-                            <Login />
-                        </PublicRoute>
-                    }
-                />
+                <Route path="/login" element={<PublicRoute> <Login /></PublicRoute>} />
 
                 {/* ADMIN */}
                 <Route path="/admin" element={<PrivateRoute role="ADMIN"><Dashboard /></PrivateRoute>} />
@@ -31,6 +25,8 @@ export default function AppRouter() {
                 <Route path="/admin/alumnos" element={<PrivateRoute role="ADMIN"><Alumnos /></PrivateRoute>} />
                 <Route path="/admin/reportes" element={<PrivateRoute role="ADMIN"><Reportes /></PrivateRoute>} />
                 <Route path="/admin/usuarios/crear" element={<PrivateRoute role="ADMIN"><CrearUsuario /></PrivateRoute>} />
+                <Route path="/admin/alumnos/crear" element={<PrivateRoute role="ADMIN"><CrearAlumno /></PrivateRoute>} />
+
                 {/* PORTERO */}
                 <Route path="/portero" element={<PrivateRoute role="PORTERO"><Asistencia /></PrivateRoute>} />
 
