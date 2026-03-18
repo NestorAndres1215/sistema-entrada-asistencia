@@ -4,9 +4,9 @@ import SidebarAdmin from '../../components/SidebarAdmin'
 import { useNavigate } from 'react-router-dom'
 import '../../styles/usuarios.css'
 const rolColor: Record<string, { bg: string; color: string; icon: string }> = {
-  ADMIN:   { bg: 'rgba(232,201,106,0.15)', color: '#e8c96a', icon: 'fa-user-tie'  },
-  PORTERO: { bg: 'rgba(79,142,247,0.15)',  color: '#4f8ef7', icon: 'fa-door-open' },
-  DEFAULT: { bg: 'rgba(255,255,255,0.08)', color: '#aaa',    icon: 'fa-user'      },
+  ADMIN: { bg: 'rgba(232,201,106,0.15)', color: '#e8c96a', icon: 'fa-user-tie' },
+  PORTERO: { bg: 'rgba(79,142,247,0.15)', color: '#4f8ef7', icon: 'fa-door-open' },
+  DEFAULT: { bg: 'rgba(255,255,255,0.08)', color: '#aaa', icon: 'fa-user' },
 }
 
 function getRol(rol: string) {
@@ -14,19 +14,19 @@ function getRol(rol: string) {
 }
 
 const FILTERS: { label: string; value: 'TODOS' | 'ADMIN' | 'PORTERO'; icon: string }[] = [
-  { label: 'Todos',   value: 'TODOS',   icon: 'fa-users'     },
-  { label: 'Admin',   value: 'ADMIN',   icon: 'fa-user-tie'  },
+  { label: 'Todos', value: 'TODOS', icon: 'fa-users' },
+  { label: 'Admin', value: 'ADMIN', icon: 'fa-user-tie' },
   { label: 'Portero', value: 'PORTERO', icon: 'fa-door-open' },
 ]
 
 const PAGE_SIZE = 8
 
 export default function Usuarios() {
-  const [usuarios, setUsuarios]   = useState<any[]>([])
-  const [search, setSearch]       = useState('')
-  const [loading, setLoading]     = useState(true)
+  const [usuarios, setUsuarios] = useState<any[]>([])
+  const [search, setSearch] = useState('')
+  const [loading, setLoading] = useState(true)
   const [rolFilter, setRolFilter] = useState<'TODOS' | 'ADMIN' | 'PORTERO'>('TODOS')
-  const [page, setPage]           = useState(1)
+  const [page, setPage] = useState(1)
   const navigate = useNavigate()
 
   useEffect(() => {
@@ -43,7 +43,7 @@ export default function Usuarios() {
   })
 
   const totalPages = Math.max(1, Math.ceil(filtered.length / PAGE_SIZE))
-  const paginated  = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
+  const paginated = filtered.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE)
 
   const handleFilterChange = (f: 'TODOS' | 'ADMIN' | 'PORTERO') => {
     setRolFilter(f)
@@ -92,7 +92,7 @@ export default function Usuarios() {
                 <i className="fa-solid fa-users" style={{ color: '#4f8ef7' }}></i>
                 Total: {usuarios.length} usuarios
               </div>
-              {(['ADMIN','PORTERO'] as const).map(rol => {
+              {(['ADMIN', 'PORTERO'] as const).map(rol => {
                 const count = usuarios.filter(u => u.rol === rol).length
                 const r = getRol(rol)
                 return (
@@ -159,7 +159,7 @@ export default function Usuarios() {
                   ) : (
                     paginated.map((u, i) => {
                       const r = getRol(u.rol)
-                      const initials = u.username?.slice(0,2).toUpperCase() ?? '??'
+                      const initials = u.username?.slice(0, 2).toUpperCase() ?? '??'
                       return (
                         <tr key={u.id} style={{ animationDelay: `${i * 0.04}s` }}>
                           <td>
