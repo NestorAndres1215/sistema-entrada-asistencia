@@ -4,6 +4,9 @@ import { ConfigModule, ConfigService } from '@nestjs/config';
 import { getDatabaseConfig } from './config/database.config';
 import { UsuarioModule } from './modules/usuario/usuario.module';
 import { AuthModule } from './modules/auth/auth.module';
+import { AlumnoModule } from './modules/alumno/alumno.module';
+import { AsistenciaModule } from './modules/asistencia/asistencia.module';
+import { IncidenciaModule } from './modules/incidencia/incidencia.module';
 
 
 @Module({
@@ -14,7 +17,9 @@ import { AuthModule } from './modules/auth/auth.module';
       inject: [ConfigService],
       useFactory: getDatabaseConfig,
     }),
-    UsuarioModule,AuthModule
+    UsuarioModule,AuthModule,    AlumnoModule,
+    AsistenciaModule,
+    IncidenciaModule
   ],
 })
 export class AppModule {}

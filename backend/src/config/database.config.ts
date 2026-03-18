@@ -1,11 +1,10 @@
 // src/config/database.config.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
-import { Usuario } from '../modules/usuario/usuario.entity';
-/*
-import { Alumno } from '../modules/alumno/alumno.entity';
-import { Asistencia } from '../modules/asistencia/asistencia.entity';
-import { Incidencia } from '../modules/incidencia/incidencia.entity';*/
+import { Alumno } from 'src/modules/alumno/alumno.entity';
+import { Asistencia } from 'src/modules/asistencia/Asistencia.entity';
+import { Incidencia } from 'src/modules/incidencia/Incidencia.entity';
+import { Usuario } from 'src/modules/usuario/usuario.entity';
 
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
@@ -14,7 +13,7 @@ export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOp
   username: configService.get<string>('DB_USER', 'root'),
   password: configService.get<string>('DB_PASS', ''),
   database: configService.get<string>('DB_NAME', 'sistema_entrada'),
-  entities: [Usuario],
-  synchronize: true, // solo en desarrollo, nunca en producción
+  entities: [Usuario,Alumno,Asistencia,Incidencia],
+  synchronize: true, 
   logging: true,
 });
