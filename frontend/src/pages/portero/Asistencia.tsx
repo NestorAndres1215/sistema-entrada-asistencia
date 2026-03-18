@@ -15,7 +15,7 @@ interface ScanRecord {
 export default function Asistencia() {
   const [status, setStatus] = useState<ScanStatus>('idle')
   const [lastCode, setLastCode] = useState<string>('')
-  const [lastRecord, setLastRecord] = useState<ScanRecord | null>(null)
+const [_lastRecord, setLastRecord] = useState<ScanRecord | null>(null)
   const [historial, setHistorial] = useState<ScanRecord[]>([])
   const [totalHoy, setTotalHoy] = useState(0)
 

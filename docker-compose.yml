@@ -1,0 +1,50 @@
+version: '3.9'
+
+services:
+  mysql:
+    image: mysql:8.1
+    container_name: mysql-db
+    restart: always
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: sistema_entrada
+    ports:
+      - "3310:3306"   # host 3310 -> contenedor 3306
+    volumes:
+      - mysql-data:/var/lib/mysql
+    networks:
+      - app-network
+
+  backend:
+    build: ./backend
+    container_name: nest-backend
+    ports:
+      - "3000:3000"
+    environment:
+      DB_HOST: mysql
+      DB_PORT: 3306
+      DB_USER: root
+      DB_PASS: 12345
+      DB_NAME: sistema_entrada
+      JWT_SECRET: mi_super_secreto
+    depends_on:
+      - mysql
+    networks:
+      - app-network
+
+  frontend:
+    build: ./frontend
+    container_name: react-frontend
+    ports:
+      - "80:80"
+    depends_on:
+      - backend
+    networks:
+      - app-network
+
+networks:
+  app-network:
+    driver: bridge
+
+volumes:
+  mysql-data:

@@ -33,19 +33,19 @@ export default function QRScanner({ onScan }: Props) {
             <QrReader
               constraints={{ facingMode: 'user' }}
               onResult={(result, err) => {
-                if (result?.text && result.text.trim() !== '') {
+                // 🔹 Solución: forzamos cast a 'any' para evitar error TS2341
+                const data = (result as any)?.text || ''
+
+                if (data.trim() !== '') {
                   setError(null)
                   setPermission('granted')
-                  setScannedText(result.text)
-                  onScan(result.text)
+                  setScannedText(data)
+                  onScan(data)
 
                   const mensajeQR = new SpeechSynthesisUtterance('Asistencia registrada')
                   window.speechSynthesis.speak(mensajeQR)
                 } else if (err) {
-
-                  
-                    setPermission('pending')
-          
+                  setPermission('pending')
                 }
               }}
               videoStyle={{ width: '100%', height: '100%', objectFit: 'cover', borderRadius: 12 }}
@@ -55,7 +55,16 @@ export default function QRScanner({ onScan }: Props) {
         </div>
 
         {/* Mostrar QR escaneado */}
-        <div style={{ fontFamily: 'Lato, sans-serif', fontSize: 14, color: '#fff', background: '#1a1f35', padding: 10, borderRadius: 8 }}>
+        <div
+          style={{
+            fontFamily: 'Lato, sans-serif',
+            fontSize: 14,
+            color: '#fff',
+            background: '#1a1f35',
+            padding: 10,
+            borderRadius: 8,
+          }}
+        >
           <strong>Escaneado:</strong> {scannedText || 'Ninguno'}
         </div>
 
@@ -66,7 +75,14 @@ export default function QRScanner({ onScan }: Props) {
             {error}
             <button
               onClick={() => setError(null)}
-              style={{ marginLeft: 'auto', background: 'none', border: 'none', color: '#f76f6f', cursor: 'pointer', fontSize: 12 }}
+              style={{
+                marginLeft: 'auto',
+                background: 'none',
+                border: 'none',
+                color: '#f76f6f',
+                cursor: 'pointer',
+                fontSize: 12,
+              }}
             >
               <i className="fa-solid fa-xmark"></i>
             </button>

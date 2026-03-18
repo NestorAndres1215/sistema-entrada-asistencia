@@ -8,11 +8,12 @@ import { Usuario } from 'src/modules/usuario/usuario.entity';
 export const getDatabaseConfig = (configService: ConfigService): TypeOrmModuleOptions => ({
   type: 'mysql',
   host: configService.get<string>('DB_HOST', 'localhost'),
+  //port: configService.get<number>('DB_PORT', 3307),
   port: configService.get<number>('DB_PORT', 3306),
   username: configService.get<string>('DB_USER', 'root'),
   password: configService.get<string>('DB_PASS', ''),
   database: configService.get<string>('DB_NAME', 'sistema_entrada'),
-  entities: [Usuario,Alumno,Asistencia,Incidencia],
-  synchronize: true, 
+  entities: [Usuario, Alumno, Asistencia, Incidencia],
+  synchronize: true,
   logging: true,
 });
