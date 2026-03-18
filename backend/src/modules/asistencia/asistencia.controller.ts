@@ -14,6 +14,7 @@ export class AsistenciaController {
   @UseGuards(AuthGuard)
   @ApiBearerAuth('JWT-auth')
   crear(@Body() dto: CrearAsistenciaDto) {
+    console.log( dto)
     return this.asistenciaService.crear(dto);
   }
 

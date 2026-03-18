@@ -29,6 +29,7 @@ export default function CrearAlumno() {
         if (Object.keys(errs).length) { setErrors(errs); return }
         setLoading(true)
         try {
+            console.log('Creating alumno with data:', form)
             await createAlumno(form)
             navigate('/admin/alumnos')
         } catch {

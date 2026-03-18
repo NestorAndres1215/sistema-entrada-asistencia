@@ -4,21 +4,9 @@ import { EstadoAsistencia, TipoRegistro } from '../Asistencia.entity';
 
 export class CrearAsistenciaDto {
 
-  @IsNumber()
-  alumno_id: number;
-
-  @IsDateString()
-  fecha: string;
-
   @IsString()
-  hora: string;
+  codigo: string; // el código del alumno escaneado
 
   @IsEnum(TipoRegistro)
   tipo_registro: TipoRegistro;
-
-  @IsEnum(EstadoAsistencia)
-  estado: EstadoAsistencia;
-
-  @IsNumber()
-  registrado_por: number;
 }

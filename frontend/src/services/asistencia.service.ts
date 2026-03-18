@@ -1,6 +1,6 @@
 import api from './api'
 
 export const registrarAsistencia = (data: any) =>
-  api.post('/asistencia', data)
+  api.post('/asistencias', data)
 
-export const getAsistencias = () => api.get('/asistencia')
+export const getAsistencias = () => api.get('/asistencias')

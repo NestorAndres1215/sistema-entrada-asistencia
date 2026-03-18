@@ -6,7 +6,7 @@ interface Props {
 }
 
 export default function QRScanner({ onScan }: Props) {
-  const [error, setError]       = useState<string | null>(null)
+  const [error, setError] = useState<string | null>(null)
   const [permission, setPermission] = useState<'pending' | 'granted' | 'denied'>('pending')
 
   return (
@@ -90,21 +90,19 @@ export default function QRScanner({ onScan }: Props) {
           <div style={{ paddingTop: '75%', position: 'relative' }}>
             <div style={{ position: 'absolute', inset: 0 }}>
               <QrReader
-                constraints={{ facingMode: 'environment' }}
+                constraints={{ facingMode: 'user' }} // cámara frontal de PC/laptop
                 onResult={(result, err) => {
-                  if (result) {
-                    setError(null)
-                    setPermission('granted')
-                    onScan(result.getText())
-                  }
-                  if (err) {
+                  if (result?.text) {
+                    setError(null);
+                    setPermission('granted');
+                    onScan(result.text);
+                  } else if (err) {
                     if (err.name === 'NotAllowedError') {
-                      setPermission('denied')
+                      setPermission('denied');
                     } else if (err.name !== 'NotFoundException') {
-                      setError('Error al leer el código QR')
+                      setError('Error al leer el código QR');
                     } else {
-                      // NotFoundException = normal, no camera feed yet showing
-                      setPermission('granted')
+                      setPermission('pending');
                     }
                   }
                 }}
