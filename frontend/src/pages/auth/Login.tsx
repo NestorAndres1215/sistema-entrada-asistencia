@@ -6,15 +6,16 @@ import { useNavigate } from 'react-router-dom'
 export default function Login() {
   const [username, setUsername] = useState('')
   const [password, setPassword] = useState('')
+  const [loading, setLoading] = useState(false)
 
   const login = useAuthStore((state) => state.login)
   const navigate = useNavigate()
 
   const handleLogin = async () => {
+    setLoading(true)
     try {
       const res = await loginRequest({ username, password })
       login(res.data)
-
       if (res.data.user.rol === 'ADMIN') {
         navigate('/admin')
       } else {
@@ -22,15 +23,311 @@ export default function Login() {
       }
     } catch (error) {
       alert('Error al iniciar sesión')
+    } finally {
+      setLoading(false)
     }
   }
 
+  const handleKeyDown = (e: React.KeyboardEvent) => {
+    if (e.key === 'Enter') handleLogin()
+  }
+
   return (
-    <div>
-      <h2>Login</h2>
-      <input placeholder="Usuario" onChange={(e) => setUsername(e.target.value)} />
-      <input type="password" placeholder="Password" onChange={(e) => setPassword(e.target.value)} />
-      <button onClick={handleLogin}>Ingresar</button>
-    </div>
+    <>
+      <style>{`
+        @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@600;700&family=Lato:wght@300;400;700&display=swap');
+        @import url('https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css');
+
+        * { box-sizing: border-box; margin: 0; padding: 0; }
+
+        .login-wrapper {
+          min-height: 100vh;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          background: #0f1f3d;
+          position: relative;
+          overflow: hidden;
+          font-family: 'Lato', sans-serif;
+        }
+
+        /* Decorative background circles */
+        .login-wrapper::before {
+          content: '';
+          position: absolute;
+          width: 600px;
+          height: 600px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(192,160,80,0.12) 0%, transparent 70%);
+          top: -150px;
+          right: -150px;
+        }
+        .login-wrapper::after {
+          content: '';
+          position: absolute;
+          width: 400px;
+          height: 400px;
+          border-radius: 50%;
+          background: radial-gradient(circle, rgba(255,255,255,0.04) 0%, transparent 70%);
+          bottom: -100px;
+          left: -100px;
+        }
+
+        .login-card {
+          position: relative;
+          z-index: 1;
+          background: rgba(255,255,255,0.04);
+          backdrop-filter: blur(20px);
+          border: 1px solid rgba(192,160,80,0.25);
+          border-radius: 20px;
+          padding: 52px 48px 44px;
+          width: 100%;
+          max-width: 420px;
+          box-shadow:
+            0 0 0 1px rgba(255,255,255,0.05),
+            0 32px 80px rgba(0,0,0,0.5),
+            0 8px 24px rgba(0,0,0,0.3);
+          animation: cardIn 0.6s cubic-bezier(0.22, 1, 0.36, 1) both;
+        }
+
+        @keyframes cardIn {
+          from { opacity: 0; transform: translateY(32px) scale(0.97); }
+          to   { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        .school-icon {
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          width: 72px;
+          height: 72px;
+          border-radius: 50%;
+          background: linear-gradient(135deg, #c0a050 0%, #e8c96a 100%);
+          margin: 0 auto 20px;
+          box-shadow: 0 8px 24px rgba(192,160,80,0.35);
+          animation: iconIn 0.7s cubic-bezier(0.22, 1, 0.36, 1) 0.1s both;
+        }
+
+        @keyframes iconIn {
+          from { opacity: 0; transform: scale(0.6) rotate(-15deg); }
+          to   { opacity: 1; transform: scale(1) rotate(0deg); }
+        }
+
+        .school-icon i {
+          font-size: 32px;
+          color: #0f1f3d;
+        }
+
+        .school-name {
+          text-align: center;
+          font-family: 'Playfair Display', serif;
+          font-size: 22px;
+          font-weight: 700;
+          color: #e8c96a;
+          letter-spacing: 0.5px;
+          margin-bottom: 4px;
+          animation: fadeUp 0.6s ease 0.2s both;
+        }
+
+        .school-subtitle {
+          text-align: center;
+          font-size: 12px;
+          font-weight: 300;
+          color: rgba(255,255,255,0.45);
+          letter-spacing: 2px;
+          text-transform: uppercase;
+          margin-bottom: 36px;
+          animation: fadeUp 0.6s ease 0.3s both;
+        }
+
+        @keyframes fadeUp {
+          from { opacity: 0; transform: translateY(10px); }
+          to   { opacity: 1; transform: translateY(0); }
+        }
+
+        .divider {
+          display: flex;
+          align-items: center;
+          gap: 12px;
+          margin-bottom: 28px;
+          animation: fadeUp 0.6s ease 0.35s both;
+        }
+        .divider::before, .divider::after {
+          content: '';
+          flex: 1;
+          height: 1px;
+          background: rgba(192,160,80,0.25);
+        }
+        .divider span {
+          font-size: 11px;
+          color: rgba(255,255,255,0.3);
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+        }
+
+        .input-group {
+          position: relative;
+          margin-bottom: 18px;
+          animation: fadeUp 0.6s ease var(--delay, 0.4s) both;
+        }
+
+        .input-icon {
+          position: absolute;
+          left: 16px;
+          top: 50%;
+          transform: translateY(-50%);
+          color: rgba(192,160,80,0.6);
+          font-size: 15px;
+          pointer-events: none;
+          transition: color 0.2s;
+        }
+
+        .input-group:focus-within .input-icon {
+          color: #e8c96a;
+        }
+
+        .login-input {
+          width: 100%;
+          padding: 14px 16px 14px 44px;
+          background: rgba(255,255,255,0.06);
+          border: 1px solid rgba(255,255,255,0.1);
+          border-radius: 10px;
+          color: #fff;
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          font-weight: 400;
+          outline: none;
+          transition: border-color 0.25s, background 0.25s, box-shadow 0.25s;
+        }
+
+        .login-input::placeholder {
+          color: rgba(255,255,255,0.3);
+        }
+
+        .login-input:focus {
+          border-color: rgba(192,160,80,0.6);
+          background: rgba(255,255,255,0.09);
+          box-shadow: 0 0 0 3px rgba(192,160,80,0.1);
+        }
+
+        .login-btn {
+          width: 100%;
+          margin-top: 8px;
+          padding: 15px;
+          background: linear-gradient(135deg, #c0a050 0%, #e8c96a 100%);
+          border: none;
+          border-radius: 10px;
+          color: #0f1f3d;
+          font-family: 'Lato', sans-serif;
+          font-size: 14px;
+          font-weight: 700;
+          letter-spacing: 1.5px;
+          text-transform: uppercase;
+          cursor: pointer;
+          transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.18s;
+          box-shadow: 0 6px 20px rgba(192,160,80,0.35);
+          animation: fadeUp 0.6s ease 0.55s both;
+          display: flex;
+          align-items: center;
+          justify-content: center;
+          gap: 10px;
+        }
+
+        .login-btn:hover:not(:disabled) {
+          transform: translateY(-2px);
+          box-shadow: 0 10px 28px rgba(192,160,80,0.5);
+        }
+
+        .login-btn:active:not(:disabled) {
+          transform: translateY(0px);
+        }
+
+        .login-btn:disabled {
+          opacity: 0.65;
+          cursor: not-allowed;
+        }
+
+        .login-footer {
+          text-align: center;
+          margin-top: 28px;
+          font-size: 11px;
+          color: rgba(255,255,255,0.2);
+          letter-spacing: 0.5px;
+          animation: fadeUp 0.6s ease 0.6s both;
+        }
+
+        .fa-spin-slow {
+          animation: fa-spin 1.2s linear infinite;
+        }
+
+        @keyframes fa-spin {
+          from { transform: rotate(0deg); }
+          to { transform: rotate(360deg); }
+        }
+      `}</style>
+
+      <div className="login-wrapper">
+        <div className="login-card">
+
+          <div className="school-icon">
+            <i className="fa-solid fa-school"></i>
+          </div>
+
+          <div className="school-name">Sistema Escolar</div>
+          <div className="school-subtitle">Portal de Acceso</div>
+
+          <div className="divider"><span>Identificación</span></div>
+
+          <div className="input-group" style={{ '--delay': '0.4s' } as React.CSSProperties}>
+            <i className="fa-solid fa-user input-icon"></i>
+            <input
+              className="login-input"
+              placeholder="Usuario"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoComplete="username"
+            />
+          </div>
+
+          <div className="input-group" style={{ '--delay': '0.48s' } as React.CSSProperties}>
+            <i className="fa-solid fa-lock input-icon"></i>
+            <input
+              type="password"
+              className="login-input"
+              placeholder="Contraseña"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+              onKeyDown={handleKeyDown}
+              autoComplete="current-password"
+            />
+          </div>
+
+          <button
+            className="login-btn"
+            onClick={handleLogin}
+            disabled={loading}
+          >
+            {loading ? (
+              <>
+                <i className="fa-solid fa-circle-notch fa-spin-slow"></i>
+                Ingresando...
+              </>
+            ) : (
+              <>
+                <i className="fa-solid fa-right-to-bracket"></i>
+                Ingresar
+              </>
+            )}
+          </button>
+
+          <div className="login-footer">
+            <i className="fa-solid fa-shield-halved" style={{ marginRight: 6 }}></i>
+            Acceso restringido al personal autorizado
+          </div>
+
+        </div>
+      </div>
+    </>
   )
 }
