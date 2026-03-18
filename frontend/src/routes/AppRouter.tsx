@@ -8,6 +8,7 @@ import Dashboard from '../pages/admin/Dashboard'
 import Login from '../pages/auth/Login'
 import Asistencia from '../pages/portero/Asistencia'
 import PublicRoute from '../guards/PublicRoute'
+import CrearUsuario from '../pages/admin/CrearUsuario'
 
 
 export default function AppRouter() {
@@ -29,7 +30,7 @@ export default function AppRouter() {
                 <Route path="/admin/usuarios" element={<PrivateRoute role="ADMIN"><Usuarios /></PrivateRoute>} />
                 <Route path="/admin/alumnos" element={<PrivateRoute role="ADMIN"><Alumnos /></PrivateRoute>} />
                 <Route path="/admin/reportes" element={<PrivateRoute role="ADMIN"><Reportes /></PrivateRoute>} />
-
+                <Route path="/admin/usuarios/crear" element={<PrivateRoute role="ADMIN"><CrearUsuario /></PrivateRoute>} />
                 {/* PORTERO */}
                 <Route path="/portero" element={<PrivateRoute role="PORTERO"><Asistencia /></PrivateRoute>} />
 
