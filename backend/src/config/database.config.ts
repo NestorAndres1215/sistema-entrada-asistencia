@@ -1,4 +1,3 @@
-// src/config/database.config.ts
 import { TypeOrmModuleOptions } from '@nestjs/typeorm';
 import { ConfigService } from '@nestjs/config';
 import { Alumno } from 'src/modules/alumno/alumno.entity';
